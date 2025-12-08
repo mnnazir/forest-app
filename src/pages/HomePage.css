@@ -5,22 +5,7 @@
 }
 
 /* Hero Section with Forest Background */
-.hero-section {
-  position: relative;
-  min-height: 90vh;
-  background: 
-    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
-    url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80') 
-    center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  padding: 2rem;
-  border-radius: 0 0 40px 40px;
-  margin-bottom: 4rem;
-}
+
 
 .hero-overlay {
   max-width: 1200px;
@@ -275,7 +260,8 @@
 
 /* Problem Section */
 .problem-section {
-  background: #1B5E20;
+  background:   url('https://res.cloudinary.com/enchanting/q_70,f_auto,w_1536,h_1025,c_fit/exodus-web/2022/12/AdobeStock_509991051.jpeg') 
+    center/cover no-repeat;;
   color: white;
   padding: 6rem 2rem;
   margin: 4rem 0;
@@ -406,7 +392,7 @@
 .final-cta {
   text-align: center;
   padding: 6rem 2rem;
-  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  background: url(https://sb.ecobnb.net/app/uploads/sites/3/2022/04/hoh-870x490.jpg.webp) center/cover no-repeat;
   color: white;
   border-radius: 40px;
   margin: 0 2rem 4rem;
@@ -555,3 +541,20 @@
 .step-card:nth-child(1) { animation-delay: 0.1s; }
 .step-card:nth-child(2) { animation-delay: 0.2s; }
 .step-card:nth-child(3) { animation-delay: 0.3s; }
+
+.hero-section {
+  position: relative;
+  min-height: 90vh;
+  background: 
+    /* linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), */
+    url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80') 
+    center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+  border-radius: 0 0 40px 40px;
+  margin-bottom: 4rem;
+}
