@@ -1,0 +1,361 @@
+/* src/pages/LoginPage.css - UPDATED VERSION */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
+  overflow: hidden;
+  padding: 20px; /* ← ADD THIS LINE */
+}
+
+/* Background with Forest Image */
+.login-background {
+  position: fixed; /* ← CHANGE FROM absolute TO fixed */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    /* linear-gradient(135deg, rgba(232, 245, 233, 0.9) 0%, rgba(200, 230, 201, 0.9) 100%), */
+    url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=40')
+    center/cover no-repeat;
+  filter: blur(2px);
+  z-index: -1;
+}
+
+/* Background Pattern Overlay */
+.login-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://www.transparenttextures.com/patterns/light-wool.png');
+  opacity: 0.1;
+}
+
+/* Main Container - UPDATED */
+.login-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1400px;
+  width: 100%; /* ← CHANGE FROM 95% TO 100% */
+  height: auto; /* ← CHANGE FROM 90vh TO auto */
+  min-height: 90vh; /* ← ADD THIS LINE */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  overflow: hidden; /* ← CHANGE TO visible */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 20px; /* ← ADD THIS LINE */
+}
+
+/* Left Side - Branding - UPDATED */
+.login-branding {
+  background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+  color: white;
+  padding: 3rem 2.5rem; /* ← REDUCE PADDING */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 600px; /* ← ADD MIN HEIGHT */
+}
+
+/* Right Side - Form - UPDATED */
+.login-form-container {
+  padding: 2.5rem; /* ← REDUCE PADDING */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto; /* ← ADD SCROLL IF NEEDED */
+  max-height: 90vh; /* ← ADD MAX HEIGHT */
+}
+
+/* Form Card - UPDATED */
+.form-card {
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+  padding-bottom: 20px; /* ← ADD PADDING AT BOTTOM */
+}
+
+/* Form Groups - UPDATED FOR BETTER SPACING */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; /* ← REDUCE GAP */
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem; /* ← REDUCE GAP */
+}
+
+.form-input {
+  padding: 0.9rem 1.2rem; /* ← REDUCE PADDING */
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  width: 100%; /* ← ENSURE FULL WIDTH */
+  box-sizing: border-box; /* ← ADD THIS */
+}
+
+/* Submit Button - UPDATED */
+.submit-btn {
+  padding: 1rem; /* ← REDUCE PADDING */
+  background: linear-gradient(135deg, #2E7D32, #1B5E20);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem; /* ← REDUCE FONT SIZE */
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+  width: 100%; /* ← ENSURE FULL WIDTH */
+}
+
+/* Demo Credentials - UPDATED */
+.demo-credentials {
+  margin-top: 1.5rem; /* ← REDUCE MARGIN */
+  padding: 1.2rem; /* ← REDUCE PADDING */
+  background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
+  border-radius: 15px;
+  border: 1px solid #e0e0e0;
+}
+
+/* Responsive Design - UPDATED */
+@media (max-width: 1200px) {
+  .login-container {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+    height: auto;
+    margin: 20px auto;
+  }
+  
+  .login-branding {
+    min-height: 300px; /* ← REDUCE FOR MOBILE */
+    padding: 2rem;
+  }
+  
+  .login-form-container {
+    padding: 2rem;
+    max-height: none; /* ← REMOVE MAX HEIGHT ON MOBILE */
+  }
+  
+  .brand-logo {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .brand-tagline {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .brand-tagline h2 {
+    font-size: 2rem;
+  }
+  
+  .brand-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .feature {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+  
+  .feature-text h4 {
+    font-size: 1rem;
+  }
+  
+  .feature-text p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    padding: 10px;
+    align-items: flex-start; /* ← CHANGE FROM center TO flex-start */
+  }
+  
+  .login-container {
+    margin: 10px;
+    border-radius: 20px;
+    min-height: auto;
+  }
+  
+  .login-branding {
+    padding: 1.5rem;
+    min-height: 250px;
+  }
+  
+  .login-form-container {
+    padding: 1.5rem;
+  }
+  
+  .brand-logo h1 {
+    font-size: 1.8rem;
+  }
+  
+  .brand-tagline h2 {
+    font-size: 1.6rem;
+  }
+  
+  .brand-tagline p {
+    font-size: 1rem;
+  }
+  
+  .brand-features {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .form-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .tab-btn {
+    padding: 0.8rem;
+  }
+  
+  .form-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .form-input {
+    padding: 0.8rem 1rem;
+  }
+  
+  .submit-btn {
+    padding: 0.9rem;
+    font-size: 0.95rem;
+  }
+  
+  .demo-credentials {
+    padding: 1rem;
+  }
+  
+  .demo-value {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    margin: 5px;
+    border-radius: 15px;
+  }
+  
+  .login-branding,
+  .login-form-container {
+    padding: 1rem;
+  }
+  
+  .brand-logo h1 {
+    font-size: 1.5rem;
+  }
+  
+  .logo-icon {
+    font-size: 2.5rem;
+  }
+  
+  .brand-tagline h2 {
+    font-size: 1.4rem;
+  }
+  
+  .form-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-tabs {
+    gap: 0.3rem;
+  }
+  
+  .tab-btn {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Fix for form overflow */
+.form-card {
+  position: relative;
+  min-height: fit-content;
+}
+
+/* Ensure all content is visible */
+.auth-form {
+  max-height: none;
+  overflow: visible;
+}
+
+/* Fix for password field */
+.form-input[type="password"] {
+  font-family: monospace; /* Show dots clearly */
+  letter-spacing: 1px;
+}
+
+/* Scrollbar styling for form container */
+.login-form-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.login-form-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.login-form-container::-webkit-scrollbar-thumb {
+  background: #2E7D32;
+  border-radius: 10px;
+}
+
+.login-form-container::-webkit-scrollbar-thumb:hover {
+  background: #1B5E20;
+}
+
+/* Make sure everything is clickable */
+button, input, select, label {
+  cursor: pointer;
+}
+
+input, select {
+  cursor: text;
+}
+
+/* Add smooth transitions */
+* {
+  transition: all 0.2s ease;
+}
