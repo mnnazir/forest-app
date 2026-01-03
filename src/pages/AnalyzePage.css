@@ -1480,3 +1480,43 @@
     grid-template-columns: 1fr;
   }
 }
+/* Database Note */
+.database-note {
+  text-align: center;
+  margin-top: 20px;
+  padding: 15px;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border-radius: 12px;
+  border: 1px solid #bbf7d0;
+}
+
+.database-note p {
+  color: #166534;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Analysis ID in Results */
+.analysis-id {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-top: 15px;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+}
+
+.id-label {
+  color: rgba(255, 255, 255, 0.8);
+  margin-right: 8px;
+}
+
+.id-value {
+  color: white;
+  font-weight: 600;
+  font-family: monospace;
+}

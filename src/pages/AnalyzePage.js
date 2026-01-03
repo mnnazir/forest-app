@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabase'; // Import supabase
 import './AnalyzePage.css';
 
 function AnalyzePage() {
@@ -7,6 +9,7 @@ function AnalyzePage() {
   const [loading, setLoading] = useState(false);
   const [aiResults, setAiResults] = useState(null);
   const [activeTab, setActiveTab] = useState('upload');
+  const navigate = useNavigate();
 
   // Value-based weights
   const [values, setValues] = useState({
@@ -92,9 +95,17 @@ function AnalyzePage() {
     };
   };
 
-  const handleAnalyze = (e) => {
+  const handleAnalyze = async (e) => {
     e.preventDefault();
     
+    // Check if user is logged in
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      alert('Please login first to save your analysis');
+      navigate('/login');
+      return;
+    }
+
     if (!image) {
       alert('Please upload a forest image first');
       setActiveTab('upload');
@@ -103,9 +114,89 @@ function AnalyzePage() {
 
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      // 1. Simulate AI Analysis (2 seconds delay)
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       const aiAnalysis = getSimulatedAI();
 
+      // 2. Calculate scores
+      const technicalScore = (
+        aiAnalysis.health_score * 2 + 
+        aiAnalysis.biodiversity_score * 1.5 +
+        aiAnalysis.canopy_cover / 10
+      ) / 4;
+
+      const personalScore = (
+        values.heritage * 0.3 +
+        values.beauty * 0.2 +
+        values.biodiversity * 0.2 +
+        values.recreation * 0.15 +
+        values.family * 0.15
+      ) / 10;
+
+      const finalResult = {
+        ai: aiAnalysis,
+        values: values,
+        characteristics: characteristics,
+        scores: {
+          technical: technicalScore.toFixed(1),
+          personal: personalScore.toFixed(1),
+          overall: ((technicalScore + personalScore) / 2).toFixed(1)
+        },
+        recommendations: generateRecommendations(values, characteristics, aiAnalysis),
+        date: new Date().toISOString()
+      };
+
+      // 3. Save to Supabase Database
+      const { data, error } = await supabase
+        .from('forest_analyses')
+        .insert([
+          {
+            user_id: user.id, // IMPORTANT: Save user ID
+            ai_data: aiAnalysis,
+            values: values,
+            characteristics: characteristics,
+            scores: finalResult.scores,
+            recommendations: finalResult.recommendations,
+            created_at: new Date().toISOString(),
+            image_url: preview || null, // Store image preview URL if available
+            forest_type: aiAnalysis.forest_type,
+            health_score: aiAnalysis.health_score,
+            biodiversity_score: aiAnalysis.biodiversity_score
+          }
+        ])
+        .select();
+
+      if (error) {
+        console.error('Error saving to database:', error);
+        throw error;
+      }
+
+      console.log('Saved to database:', data);
+
+      // 4. Set results and show success
+      setAiResults({
+        ...finalResult,
+        id: data[0]?.id, // Get the ID from database response
+        date: new Date().toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })
+      });
+      
+      setActiveTab('results');
+      
+      // Show success message with database ID
+      alert(`✅ Forest analysis saved successfully!\nYour analysis ID: ${data[0]?.id?.slice(0, 8) || 'N/A'}`);
+
+    } catch (error) {
+      console.error('Analysis error:', error);
+      
+      // If database save fails, still show results (without saving)
+      const aiAnalysis = getSimulatedAI();
       const technicalScore = (
         aiAnalysis.health_score * 2 + 
         aiAnalysis.biodiversity_score * 1.5 +
@@ -140,9 +231,11 @@ function AnalyzePage() {
 
       setAiResults(finalResult);
       setActiveTab('results');
+      alert('✅ Analysis completed! (Note: Could not save to database)');
+      
+    } finally {
       setLoading(false);
-      alert('✅ Forest analysis completed successfully!');
-    }, 1500);
+    }
   };
 
   const generateRecommendations = (values, chars, ai) => {
@@ -240,7 +333,7 @@ function AnalyzePage() {
 
         <div className="analysis-container">
           
-          {/* Tab 1: Upload Photo - NEW BEAUTIFUL DESIGN */}
+          {/* Tab 1: Upload Photo */}
           {activeTab === 'upload' && (
             <div className="upload-tab">
               <div className="section-intro">
@@ -391,15 +484,15 @@ function AnalyzePage() {
                   <p>Get detailed insights on health, biodiversity, and recommendations</p>
                 </div>
                 <div className="info-card">
-                  <div className="info-icon">🌱</div>
-                  <h4>Sustainable Insights</h4>
-                  <p>Learn how to maintain and improve your forest ecosystem</p>
+                  <div className="info-icon">💾</div>
+                  <h4>Save to Dashboard</h4>
+                  <p>All analyses are saved to your personal dashboard</p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Tab 2: Set Values - ORIGINAL PERFECT DESIGN */}
+          {/* Tab 2: Set Values */}
           {activeTab === 'values' && (
             <div className="values-tab">
               <div className="values-container">
@@ -486,24 +579,34 @@ function AnalyzePage() {
                     {loading ? (
                       <>
                         <span className="loading-spinner"></span>
-                        Analyzing...
+                        Analyzing & Saving...
                       </>
                     ) : (
-                      '🚀 Analyze Forest'
+                      '🚀 Analyze & Save Forest'
                     )}
                   </button>
+                </div>
+
+                <div className="database-note">
+                  <p>💾 Your analysis will be saved to your personal dashboard</p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Tab 3: Results - ORIGINAL PERFECT DESIGN */}
+          {/* Tab 3: Results */}
           {activeTab === 'results' && aiResults && (
             <div className="results-tab">
               <div className="results-container">
                 <div className="results-header">
                   <h2>📊 Your Forest Analysis Results</h2>
                   <p>Personalized insights based on your photo and values</p>
+                  {aiResults.id && (
+                    <div className="analysis-id">
+                      <span className="id-label">Analysis ID:</span>
+                      <span className="id-value">{aiResults.id.slice(0, 8)}...</span>
+                    </div>
+                  )}
                 </div>
                 
                 {/* AI Results Card */}
@@ -536,7 +639,7 @@ function AnalyzePage() {
                       </div>
                       
                       <div className="ai-metric">
-                        <span className="metric-label">Carbon Storage</span>
+                        <span className="metric-label">Carbon Potential</span>
                         <div className="metric-value">{aiResults.ai.carbon_potential}</div>
                       </div>
                       
@@ -651,8 +754,8 @@ function AnalyzePage() {
                       <div className="step">
                         <div className="step-number">3</div>
                         <div className="step-content">
-                          <h4>Personalized Results</h4>
-                          <p>Combined analysis created your unique forest story</p>
+                          <h4>Saved to Database</h4>
+                          <p>Analysis saved to your personal dashboard</p>
                         </div>
                       </div>
                     </div>
@@ -661,7 +764,7 @@ function AnalyzePage() {
                       <span className="lock-icon">🔒</span>
                       <div>
                         <strong>Your data is private and secure</strong>
-                        <p>We never share personal information with third parties</p>
+                        <p>Only you can access your analysis history</p>
                       </div>
                     </div>
                   </div>
@@ -670,13 +773,19 @@ function AnalyzePage() {
                 {/* Action Buttons */}
                 <div className="results-actions">
                   <button 
+                    onClick={() => navigate('/dashboard')}
+                    className="action-btn primary"
+                  >
+                    📊 View in Dashboard
+                  </button>
+                  <button 
                     onClick={() => {
                       setAiResults(null);
                       setActiveTab('upload');
                       setImage(null);
                       setPreview(null);
                     }}
-                    className="action-btn primary"
+                    className="action-btn secondary"
                   >
                     🔄 New Analysis
                   </button>
